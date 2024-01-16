@@ -33,7 +33,6 @@ export const optionsAno: string[] = []
 
 export const getAnos = () => {
   let year = new Date().getFullYear()
-  
   if (optionsAno.length < 1) {
     for (let i=year; i>=limitYear; i--) {
       optionsAno.push(i.toString())
