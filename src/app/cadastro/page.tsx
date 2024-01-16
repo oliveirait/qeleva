@@ -26,7 +26,6 @@ export interface InputSelectProps extends InputHTMLAttributes<HTMLInputElement> 
 
 export const optionsNivel = ["Médio", "Superior"]
 export const optionsMateria = ["Língua Portuguesa", "Matemática"]
-export const optionsDificuldade = ["Fácil", "Médio", "Difícil"]
 export const optionsArea = ["Tecnologia da Informação"]
 export const limitYear = 2000
 export const optionsAno: string[] = []
@@ -81,19 +80,16 @@ export default function Cadastro () {
   const [resp, setResp] = React.useState('')
   const [area, setArea] = React.useState('')
   const [materia, setMateria] = React.useState('')
-  const [difficulty, setDifficulty] = React.useState('')
   const [ano, setAno] = React.useState('')
   const [nivel, setNivel] = React.useState('')
   const [cargo, setCargo] = React.useState('')
   const optionsQuestions = [a1, a2, a3, a4, a5]
  
 
-
-
   const addQuestions = async (e: any) => {
     e.preventDefault()
 
-    let empty = [enun, a1, a2, a3, a4, a5, resp, area, materia, difficulty, ano, nivel, cargo].includes('')
+    let empty = [enun, a1, a2, a3, a4, a5, resp, area, materia, ano, nivel, cargo].includes('')
 
     const data = {
       enun,
@@ -101,7 +97,7 @@ export default function Cadastro () {
       resp,
       area,
       materia,
-      difficulty,
+
       ano,
       nivel,
       cargo
@@ -121,7 +117,6 @@ export default function Cadastro () {
             setResp('')
             setArea('')
             setMateria('')
-            setDifficulty('')
             setAno('')
             setNivel('')
             setCargo('')
@@ -142,16 +137,17 @@ export default function Cadastro () {
 
   React.useEffect(() => {
     getAnos()
-  })
+  }, [])
 
   return (
 
     <div className="flex flex-col items-center justify-center m-4 ">
       
       <h1 className="font-bold text-2xl my-4">Cadastrar uma nova questão</h1>
-      <form className=" h-full w-[350px] md:w-[768px] xl:w-[1200px] xl:md:grid xl:grid-cols-2 xl:m-8  bg-zinc-300 rounded-lg my-4 shadow-md shadow-black">
-      
-        <div className="p-2 space-y-2  rounded-md m-2">
+    
+      <form className=" h-full w-[350px] md:w-[768px] xl:w-[1200px] xl:m-8  bg-zinc-300 rounded-lg my-4 shadow-md shadow-black">
+
+        <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
           <main className="font-bold">Enunciado da questão</main>
           <textarea 
             placeholder="Insira o enunciado da questão"
@@ -161,6 +157,8 @@ export default function Cadastro () {
             className="w-full p-2 rounded-md  shadow-black shadow-sm"
           />
         </div>
+       
+      <div className="xl:md:grid xl:grid-cols-2">
 
         <Inputs 
           title="Alternativa A" place="Insira a alternativa A"
@@ -187,17 +185,13 @@ export default function Cadastro () {
           value={a5} setValue={setA5}
         />
 
-        <InputSelect title="Escolha a alternativa correta" value={resp} setValue={setResp} arrValues={optionsQuestions}/>
+        <InputSelect title="Selecione a alternativa correta" value={resp} setValue={setResp} arrValues={optionsQuestions}/>
 
         <InputSelect title="Área" value={area} setValue={setArea} arrValues={optionsArea}/>
 
         <InputSelect title="Matéria" value={materia} setValue={setMateria} arrValues={optionsMateria}/>
 
-        <InputSelect title="Dificuldade" value={difficulty} setValue={setDifficulty} arrValues={optionsDificuldade}/>
-
-
         <InputSelect title="Ano" value={ano} setValue={setAno} arrValues={optionsAno}/>
-
 
         <InputSelect title="Nivel" value={nivel} setValue={setNivel} arrValues={optionsNivel}/>
 
@@ -206,21 +200,22 @@ export default function Cadastro () {
           value={cargo} setValue={setCargo}
         />
 
+      </div>
 
 
       </form>
       <button 
-          type="submit" 
-          onClick={addQuestions}
-          className="h-12 w-[350px] bg-green-800 rounded-lg m-8 md:w-[768px] xl:w-[1200px] shadow-md shadow-black"
-        >
-          <p className="font-bold text-white ">Postar</p>
-        </button>
+        type="submit"
+        onClick={addQuestions}
+        className="h-12 w-[350px] bg-green-800 rounded-lg m-8 md:w-[768px] xl:w-[1200px] shadow-md shadow-black"
+      >
+        <p className="font-bold text-white ">Postar</p>
+      </button>
 
       <div>
 
-      </div>
-
     </div>
+
+  </div>
   )
 }
