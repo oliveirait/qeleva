@@ -6,6 +6,7 @@ import { InputSelect, getAnos, optionsAno, optionsArea, optionsMateria, optionsN
 import axios from "axios";
 import { useRouter } from 'next/navigation';
 import { AppContext } from "@/context/AppContext";
+import { ResultContext } from "@/context/ResultContext";
 
 
 
@@ -28,6 +29,7 @@ export default function Questoes () {
   const [materia, setMateria] = React.useState('')
   const [ano, setAno] = React.useState('')
   const [nivel, setNivel] = React.useState('')
+  const { emptyResult } = React.useContext(ResultContext)
 
 
   const questionQuery = async (e: any) => {
@@ -47,6 +49,7 @@ export default function Questoes () {
       .then((response) => {
         if (response.data.retorno.length > 0) {
           setData(response.data)
+          emptyResult()
           return router.push('/simulado')
 
         }
@@ -62,11 +65,12 @@ export default function Questoes () {
     getAnos()
   }, [])
 
+
   return(
     <div className="items-center justify-center flex flex-col gap-4">
       <h1 className="p-8 font-bold text-2xl">Crie seu simulado</h1>
 
-      <div className="w-[350px] md:w-[768px] xl:w-[1200px] m-2 grid md:grid-cols-3 bg-zinc-200 self-center rounded-xl p-8">
+      <div className="w-[350px] h-full md:w-[768px] xl:w-[1200px] m-2 grid md:grid-cols-3 bg-zinc-200 self-center rounded-xl p-8">
         <InputSelect title="Área" value={area} setValue={setArea} arrValues={optionsArea}/>
         <InputSelect title="Matéria" value={materia} setValue={setMateria} arrValues={optionsMateria}/>
         <InputSelect title="Ano" value={ano} setValue={setAno} arrValues={optionsAno}/>
@@ -78,11 +82,8 @@ export default function Questoes () {
         <button 
           onClick={questionQuery}
           className="bg-green-950 rounded-md p-4 hover:bg-green-600 duration-200">
-          <p className="text-white font-bold " >Realizar simulado</p>
+          <p className="text-white font-bold " >Gerar simulado</p>
         </button>
-
-        <p>TESTE</p>
-        <p>{JSON.stringify(data.retorno.length)}</p>
       </div>
     </div>
   )

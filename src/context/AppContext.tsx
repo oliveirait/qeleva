@@ -21,15 +21,16 @@ const AppContext = createContext({} as StateProps)
 
 
 const AppProvider = ({children}: AppProviderProps ) => {
-  const [APPDATA, APPSETDATA] = useState<AppContextProps>({
+  const [data, setData] = useState<AppContextProps>({
     "status": 10,
     "retorno": [],
     "erro": ""
   })
 
 
+
   return (
-    <AppContext.Provider value={{data: APPDATA, setData: APPSETDATA}} >
+    <AppContext.Provider value={{data: data, setData: setData}} >
       {children}
     </AppContext.Provider>
   )

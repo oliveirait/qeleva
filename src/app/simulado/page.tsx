@@ -1,43 +1,137 @@
 'use client'
 
-import { QuestionReturnProps } from "@/@types/questionReturn";
+
 import { AppContext } from "@/context/AppContext";
 import React, { useContext } from "react";
-
+import { useRouter } from "next/navigation";
+import { ResultContext } from "@/context/ResultContext";
 
 
 export default function Simulado () { 
-  const { data, setData } = useContext(AppContext)
-  
+  const router = useRouter()
+  const { data } = useContext(AppContext)
+  const { result, setResult } = useContext(ResultContext)
+  const [selectedValue, setSelectedValue] = React.useState('')
+
+  const [pos, setPos] = React.useState(0)
+  const endPosition = (data?.retorno.length) - 1
+
+  const array: any = []
+
+  function clickChange (e: any) {
+    setSelectedValue(e.target.value)
+  }
+
+  function nextQuestion () {
+    if (pos < endPosition) {
+      array.push({ choice: selectedValue, resp: data.retorno[pos]["resp"]})
+      setResult((prev) => [...prev, { choice: selectedValue, resp: data.retorno[pos]["resp"]}])
+      setSelectedValue('')
+      setPos((prevPosition) => prevPosition + 1)
+    }
+  }
+
+  function finalize () {
+    if (pos === endPosition) {
+      array.push({ choice: selectedValue, resp: data.retorno[pos]["resp"]})
+      setResult((prev) => [...prev, { choice: selectedValue, resp: data.retorno[pos]["resp"]}])
+      router.push('/resultado')
+    }
+  }
+
+
+
   return (
     <div className="flex flex-col items-center justify-center bg-zinc-100">
-      <div className="h-full w-[350px] md:w-[768px] xl:w-[1200px] rounded-xl bg-blue-700">
+      <div className=" w-[350px] md:h-[500px] md:w-[768px] xl:w-[1000px] rounded-xl ">
       
-        {
-          data.retorno?.map((value: QuestionReturnProps, key) => 
-          <div key={key} className="space-8 m-4 rounded-md shadow-md shadow-black flex flex-col items-start justify-center w-auto bg-white p-4 ">
-            <h1 className="font-bold text-xl m-4">{value.enun}</h1>
-            <div className="flex flex-col gap-2 items-center justify-center p-2">
-                <div className="flex flex-row w-auto gap-4 space-x-2 items-center justify-center p-4 border border-zinc-700 rounded-md">
-                    <input type="radio" id="alternativa 1"  value={value.a1} className="w-6 h-6"/>
-                    <label htmlFor="alternativa 1">{value.a1}</label>
-                </div>
-                <div className="flex flex-row w-auto gap-4 space-x-2 items-center justify-center p-4 border border-zinc-700 rounded-md">
-                  <input type="radio" id="alternativa 2"  value={value.a2} className="w-6 h-6"/>
-                  <label htmlFor="alternativa 2" >{value.a2}</label>
-                </div>
-                <div className="flex flex-row w-auto gap-4 space-x-2 items-center justify-center p-4 border border-zinc-700 rounded-md">
-                  <input type="radio" id="alternativa 3" value={value.a3} className="w-6 h-6"/>
-                  <label htmlFor="alternativa 3" >{value.a3}</label>
-                </div>
+          
+          <div className="space-8 m-4 rounded-md shadow-md shadow-black flex flex-col items-start justify-center w-auto bg-white p-2 ">
+            <p className="font-bold text-md mt-4 mx-4 mb-2">{pos + 1}ª Questão: </p>
+            <h1 className=" text-md mb-4 mx-4 mt-2">{data?.retorno[pos]["enun"]}</h1>
+            
+            <div className="flex flex-col gap-2 items-center justify-center p-2 w-full text-sm">
+              
+
+              <div className={`${selectedValue === data?.retorno[pos]["a1"] && 'bg-zinc-700 text-white'} border border-black flex flex-row w-full gap-2 space-x-2 items-center justify-start  rounded-md`}>
+                <input 
+                    type="radio"  
+                    value={data?.retorno[pos]["a1"]}
+                    id={data?.retorno[pos]["a1"]}
+                    checked={selectedValue === data?.retorno[pos]["a1"]} 
+                    onChange={clickChange} 
+                    className={`${selectedValue === data?.retorno[pos]["a1"] ? 'accent-blue-500' : 'accent-black' } m-4`}
+                  /> 
+                <label htmlFor={data?.retorno[pos]["a1"]} className="w-full cursor-pointer p-4">{data?.retorno[pos]["a1"]}</label>
+              </div>
+
+              <div className={`${selectedValue === data?.retorno[pos]["a2"] && 'bg-zinc-700 text-white'} border border-black flex flex-row w-full gap-2 space-x-2 items-center justify-start  rounded-md`}>
+
+                <input 
+                    type="radio"  
+                    value={data?.retorno[pos]["a2"]}
+                    id={data?.retorno[pos]["a2"]}
+                    checked={selectedValue === data?.retorno[pos]["a2"]} 
+                    onChange={clickChange} 
+                    className={`${selectedValue === data?.retorno[pos]["a2"] ? 'accent-blue-500' : 'accent-black' } m-4`}
+                  /> 
+                <label htmlFor={data?.retorno[pos]["a2"]} className=" w-full cursor-pointer p-4">{data?.retorno[pos]["a2"]}</label>
+              </div>
+
+              <div className={`${selectedValue === data?.retorno[pos]["a3"] && 'bg-zinc-700 text-white'} border border-black flex flex-row w-full gap-2 space-x-2 items-center justify-start  rounded-md`}>
+                <input 
+                    type="radio"  
+                    value={data?.retorno[pos]["a3"]}
+                    id={data?.retorno[pos]["a3"]}
+                    checked={selectedValue === data?.retorno[pos]["a3"]} 
+                    onChange={clickChange} 
+                    className={`${selectedValue === data?.retorno[pos]["a3"] ? 'accent-blue-500' : 'accent-black' } m-4`}
+                  /> 
+                <label htmlFor={data?.retorno[pos]["a3"]} className=" w-full cursor-pointer p-4">{data?.retorno[pos]["a3"]}</label>
+              </div>
+
+              <div className={`${selectedValue === data?.retorno[pos]["a4"] && 'bg-zinc-700 text-white'} border border-black flex flex-row w-full gap-2 space-x-2 items-center justify-start  rounded-md`}>
+                <input 
+                    type="radio"  
+                    value={data?.retorno[pos]["a4"]}
+                    id={data?.retorno[pos]["a4"]}
+                    checked={selectedValue === data?.retorno[pos]["a4"]} 
+                    onChange={clickChange} 
+                    className={`${selectedValue === data?.retorno[pos]["a4"] ? 'accent-blue-500' : 'accent-black' } m-4`}
+                  /> 
+                <label htmlFor={data?.retorno[pos]["a4"]} className=" w-full cursor-pointer p-4">{data?.retorno[pos]["a4"]}</label>
+              </div>
+
+              <div className={`${selectedValue === data?.retorno[pos]["a5"] && 'bg-zinc-700 text-white'} border border-black flex flex-row w-full gap-2 space-x-2 items-center justify-start  rounded-md`}>
+                <input 
+                    type="radio"  
+                    value={data?.retorno[pos]["a5"]}
+                    id={data?.retorno[pos]["a5"]}
+                    checked={selectedValue === data?.retorno[pos]["a5"]} 
+                    onChange={clickChange} 
+                    className={`${selectedValue === data?.retorno[pos]["a5"] ? 'accent-blue-500' : 'accent-black' } m-4`}
+                  /> 
+                <label htmlFor={data?.retorno[pos]["a5"]} className=" w-full cursor-pointer p-4">{data?.retorno[pos]["a5"]}</label>
+              </div>
+
+              <div className="w-full h-14  items-start justify-center my-2 ">
+                <p className="font-bold text-sm text-zinc-500 self-start">Opção selecionada: {selectedValue}</p>
+              </div>
+
+              {
+                endPosition === pos && selectedValue ?
+                  <button onClick={finalize} type="submit" className={`bg-black hover:bg-zinc-800 duration-200 self-end  p-4  items-center justify-center rounded-md `}>
+                    <p className="text-white text-sm">Finalizar Avaliação</p>
+                  </button>
+                :
+                  <button onClick={nextQuestion} disabled={!selectedValue} type="submit" className={`${!selectedValue ? 'bg-zinc-300 text-black' : 'bg-black hover:bg-zinc-800 duration-200' } self-end  p-4  items-center justify-center rounded-md `}>
+                    <p className="text-white text-sm">Próxima questão</p>
+                  </button>
+              }
+
             </div>
           </div>
-          )
-        }
       
-     
-      
-        
       </div>
     </div>
   )

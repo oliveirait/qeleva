@@ -14,7 +14,7 @@ export const Header = () => {
                 {
                     menu.map((m, k) =>
                       <Link href={m.path} key={k}>
-                        <div className=" w-28 flex flex-row gap-4 rounded-md h-14 items-center justify-center hover:scale-105 ease-in duration-100 p-2 hover:bg-black hover:text-white">
+                        <div className=" w-28 flex flex-row gap-4 rounded-md h-12 items-center justify-center hover:scale-105 ease-in duration-100 p-2 hover:bg-black hover:text-white">
                           <p>{m.name}</p>
                         </div>
                       </Link> 
