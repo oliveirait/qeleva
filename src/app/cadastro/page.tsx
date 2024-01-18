@@ -91,8 +91,8 @@ export default function Cadastro () {
   const addQuestions = async (e: any) => {
     e.preventDefault()
 
-    let empty = [enun, a1, a2, a3, a4, a5, resp, area, materia, ano, nivel, cargo, nomeprova].includes('')
-
+    let isEmpty = [enun, a1, a2, a3, a4, a5, resp, area, materia, ano, nivel, cargo, nomeprova].includes('')
+    alert(isEmpty)
     const data = {
       enun,
       a1, a2, a3, a4, a5,
@@ -105,7 +105,9 @@ export default function Cadastro () {
       nomeprova
     }
 
-    !empty ? 
+    // isEmpty = true => Contem campos vazios
+    // isEmpty = false => Tudo certo, NAO Contem campos vazios
+    !isEmpty ? 
       await axios.post(`http://${ipServer}:3333/questions`, data)
         .then((response) => {
           let data: RespProps = response.data
@@ -134,7 +136,7 @@ export default function Cadastro () {
           alert('Não foi possível concluir a operação, tente novamente')
         )
 
-    : alert('Preencha os campos vazios')
+    : alert('Preencha os campos vazios') 
  
   } 
 

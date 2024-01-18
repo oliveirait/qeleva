@@ -46,7 +46,7 @@ export default function Simulado () {
     <div className="flex flex-col items-center justify-center bg-zinc-100">
       <div className=" w-[350px] md:h-[500px] md:w-[768px] xl:w-[1000px] rounded-xl ">
       
-          { data?.retorno.length > 0 ?
+          { data.retorno?.length > 0 ?
           <div className="space-8 m-4 rounded-md shadow-md shadow-black flex flex-col items-start justify-center w-auto bg-white p-2 ">
             <p className="font-bold text-md mt-4 mx-4 mb-2">{data?.retorno[pos]?.["nomeprova"] ? data.retorno[pos]["nomeprova"] : 'Questão'} - {data?.retorno[pos]["ano"]}</p>
             <h1 className=" text-md mb-4 mx-4 mt-2">{data?.retorno[pos]["enun"]}</h1>
@@ -121,13 +121,20 @@ export default function Simulado () {
 
               {
                 endPosition === pos && selectedValue ?
-                  <button onClick={finalize} type="submit" className={`m-2 bg-black hover:bg-zinc-800 duration-200 self-end  p-4  items-center justify-center rounded-md `}>
-                    <p className="text-white text-sm">Finalizar Avaliação</p>
+                <div className="w-full items-center justify-between flex flex-row m-2 pl-2">
+                  <h1 className="text-xl font-bold">{pos + 1} / {endPosition + 1}</h1>
+                  <button onClick={finalize} disabled={!selectedValue} type="submit" className={` ${!selectedValue ? 'bg-zinc-300 text-black' : 'bg-black hover:bg-zinc-800 duration-200' } p-4  items-center justify-center rounded-md `}>
+                    <p className="text-white text-sm">Finalizar avaliação</p>
                   </button>
+              </div>
                 :
-                  <button onClick={nextQuestion} disabled={!selectedValue} type="submit" className={`m-2 ${!selectedValue ? 'bg-zinc-300 text-black' : 'bg-black hover:bg-zinc-800 duration-200' } self-end  p-4  items-center justify-center rounded-md `}>
-                    <p className="text-white text-sm">Próxima questão</p>
-                  </button>
+                  <div className="w-full items-center justify-between flex flex-row m-2 pl-2">
+                    <h1 className="text-xl font-bold">{pos + 1} / {endPosition + 1}</h1>
+                    <button onClick={nextQuestion} disabled={!selectedValue} type="submit" className={` ${!selectedValue ? 'bg-zinc-300 text-black' : 'bg-black hover:bg-zinc-800 duration-200' } p-4  items-center justify-center rounded-md `}>
+                      <p className="text-white text-sm">Próxima questão</p>
+                    </button>
+                  </div>
+
               }
 
             </div>
