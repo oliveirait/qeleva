@@ -5,18 +5,18 @@ import { AppContext } from "@/context/AppContext";
 import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { ResultContext } from "@/context/ResultContext";
+import Link from "next/link";
 
 
 export default function Simulado () { 
   const router = useRouter()
   const { data } = useContext(AppContext)
-  const { result, setResult } = useContext(ResultContext)
+  const { setResult } = useContext(ResultContext)
   const [selectedValue, setSelectedValue] = React.useState('')
 
   const [pos, setPos] = React.useState(0)
   const endPosition = (data?.retorno.length) - 1
 
-  const array: any = []
 
   function clickChange (e: any) {
     setSelectedValue(e.target.value)
@@ -24,7 +24,6 @@ export default function Simulado () {
 
   function nextQuestion () {
     if (pos < endPosition) {
-      array.push({ choice: selectedValue, resp: data.retorno[pos]["resp"]})
       setResult((prev) => [...prev, { choice: selectedValue, resp: data.retorno[pos]["resp"]}])
       setSelectedValue('')
       setPos((prevPosition) => prevPosition + 1)
@@ -33,7 +32,6 @@ export default function Simulado () {
 
   function finalize () {
     if (pos === endPosition) {
-      array.push({ choice: selectedValue, resp: data.retorno[pos]["resp"]})
       setResult((prev) => [...prev, { choice: selectedValue, resp: data.retorno[pos]["resp"]}])
       router.push('/resultado')
     }
@@ -41,13 +39,16 @@ export default function Simulado () {
 
 
 
+
   return (
+
+    
     <div className="flex flex-col items-center justify-center bg-zinc-100">
       <div className=" w-[350px] md:h-[500px] md:w-[768px] xl:w-[1000px] rounded-xl ">
       
-          
+          { data?.retorno.length > 0 ?
           <div className="space-8 m-4 rounded-md shadow-md shadow-black flex flex-col items-start justify-center w-auto bg-white p-2 ">
-            <p className="font-bold text-md mt-4 mx-4 mb-2">{pos + 1}ª Questão: </p>
+            <p className="font-bold text-md mt-4 mx-4 mb-2">{data?.retorno[pos]?.["nomeprova"] ? data.retorno[pos]["nomeprova"] : 'Questão'} - {data?.retorno[pos]["ano"]}</p>
             <h1 className=" text-md mb-4 mx-4 mt-2">{data?.retorno[pos]["enun"]}</h1>
             
             <div className="flex flex-col gap-2 items-center justify-center p-2 w-full text-sm">
@@ -114,24 +115,36 @@ export default function Simulado () {
                 <label htmlFor={data?.retorno[pos]["a5"]} className=" w-full cursor-pointer p-4">{data?.retorno[pos]["a5"]}</label>
               </div>
 
-              <div className="w-full h-14  items-start justify-center my-2 ">
+              {/*<div className="w-full h-14  items-start justify-center my-2 ">
                 <p className="font-bold text-sm text-zinc-500 self-start">Opção selecionada: {selectedValue}</p>
-              </div>
+              </div>*/}
 
               {
                 endPosition === pos && selectedValue ?
-                  <button onClick={finalize} type="submit" className={`bg-black hover:bg-zinc-800 duration-200 self-end  p-4  items-center justify-center rounded-md `}>
+                  <button onClick={finalize} type="submit" className={`m-2 bg-black hover:bg-zinc-800 duration-200 self-end  p-4  items-center justify-center rounded-md `}>
                     <p className="text-white text-sm">Finalizar Avaliação</p>
                   </button>
                 :
-                  <button onClick={nextQuestion} disabled={!selectedValue} type="submit" className={`${!selectedValue ? 'bg-zinc-300 text-black' : 'bg-black hover:bg-zinc-800 duration-200' } self-end  p-4  items-center justify-center rounded-md `}>
+                  <button onClick={nextQuestion} disabled={!selectedValue} type="submit" className={`m-2 ${!selectedValue ? 'bg-zinc-300 text-black' : 'bg-black hover:bg-zinc-800 duration-200' } self-end  p-4  items-center justify-center rounded-md `}>
                     <p className="text-white text-sm">Próxima questão</p>
                   </button>
               }
 
             </div>
           </div>
-      
+
+          :
+          <div className="h-full w-full rounded-md my-8">
+            <div className="items-center justify-center flex">
+              <h1 className="">TENTE NOVAMENTE</h1>
+            </div>
+            
+            <Link href={'/questoes'}>Voltar</Link>
+          </div>
+        }
+
+
+
       </div>
     </div>
   )

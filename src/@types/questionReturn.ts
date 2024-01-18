@@ -12,5 +12,6 @@ export type QuestionReturnProps = {
   materia: string
   ano: string
   nivel: string
-  cargo: string
+  cargo: string,
+  nomeprova: string
 }

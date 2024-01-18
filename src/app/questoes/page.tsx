@@ -7,6 +7,8 @@ import axios from "axios";
 import { useRouter } from 'next/navigation';
 import { AppContext } from "@/context/AppContext";
 import { ResultContext } from "@/context/ResultContext";
+import { ipServer } from "@/config/server";
+
 
 
 
@@ -45,9 +47,9 @@ export default function Questoes () {
       quantidade, area, materia, ano, nivel
     }
 
-    await axios.post("http://localhost:3333/simulator", dados)
+    await axios.post(`http://${ipServer}:3333/randomSimulator`, dados)
       .then((response) => {
-        if (response.data.retorno.length > 0) {
+        if (response.data.retorno?.length > 0) {
           setData(response.data)
           emptyResult()
           return router.push('/simulado')

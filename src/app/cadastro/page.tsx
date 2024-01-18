@@ -2,6 +2,7 @@
 
 import React, { InputHTMLAttributes } from "react";
 import axios from 'axios'
+import { ipServer } from "@/config/server";
 
 
 type RespProps = {
@@ -27,7 +28,7 @@ export interface InputSelectProps extends InputHTMLAttributes<HTMLInputElement> 
 export const optionsNivel = ["Médio", "Superior"]
 export const optionsMateria = ["Língua Portuguesa", "Matemática"]
 export const optionsArea = ["Tecnologia da Informação"]
-export const limitYear = 2000
+export const limitYear = 2005
 export const optionsAno: string[] = []
 
 export const getAnos = () => {
@@ -83,13 +84,14 @@ export default function Cadastro () {
   const [ano, setAno] = React.useState('')
   const [nivel, setNivel] = React.useState('')
   const [cargo, setCargo] = React.useState('')
+  const [nomeprova, setNomeProva] = React.useState('')
   const optionsQuestions = [a1, a2, a3, a4, a5]
  
 
   const addQuestions = async (e: any) => {
     e.preventDefault()
 
-    let empty = [enun, a1, a2, a3, a4, a5, resp, area, materia, ano, nivel, cargo].includes('')
+    let empty = [enun, a1, a2, a3, a4, a5, resp, area, materia, ano, nivel, cargo, nomeprova].includes('')
 
     const data = {
       enun,
@@ -97,14 +99,14 @@ export default function Cadastro () {
       resp,
       area,
       materia,
-
       ano,
       nivel,
-      cargo
+      cargo,
+      nomeprova
     }
 
     !empty ? 
-      await axios.post("http://localhost:3333/questions", data)
+      await axios.post(`http://${ipServer}:3333/questions`, data)
         .then((response) => {
           let data: RespProps = response.data
           if (data.status === 0) {
@@ -120,6 +122,7 @@ export default function Cadastro () {
             setAno('')
             setNivel('')
             setCargo('')
+            setNomeProva('')
             alert("Questão cadastrada com sucesso!")
           }
           
@@ -196,8 +199,13 @@ export default function Cadastro () {
         <InputSelect title="Nivel" value={nivel} setValue={setNivel} arrValues={optionsNivel}/>
 
         <Inputs 
-          title="Cargo" place="Analista Judiciario"
+          title="Cargo" place="Ex: Analista Judiciario"
           value={cargo} setValue={setCargo}
+        />
+
+        <Inputs 
+          title="Nome prova" place="Ex: TRIBUNAL REGIONAL DO TRABALHO 13ª REGIÃO"
+          value={nomeprova} setValue={setNomeProva}
         />
 
       </div>
