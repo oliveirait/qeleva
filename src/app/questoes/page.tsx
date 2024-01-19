@@ -53,7 +53,6 @@ export default function Questoes () {
           setData(response.data)
           emptyResult()
           return router.push('/simulado')
-
         }
         return alert('Nao encontramos nenhuma questao com os dados informados')
       })

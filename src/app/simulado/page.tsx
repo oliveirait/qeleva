@@ -48,7 +48,8 @@ export default function Simulado () {
       
           { data.retorno?.length > 0 ?
           <div className="space-8 m-4 rounded-md shadow-md shadow-black flex flex-col items-start justify-center w-auto bg-white p-2 ">
-            <p className="font-bold text-md mt-4 mx-4 mb-2">{data?.retorno[pos]?.["nomeprova"] ? data.retorno[pos]["nomeprova"] : 'Questão'} - {data?.retorno[pos]["ano"]}</p>
+            <p className="font-bold text-md mt-4 mx-4">{data?.retorno[pos]?.["nomeprova"] ? data.retorno[pos]["nomeprova"] : 'Questão'} - {data?.retorno[pos]["ano"]}</p>
+            <p className="text-zinc-700 text-[12px] mx-4 mb-2">{data?.retorno[pos]?.["cargo"]}</p>
             <h1 className=" text-md mb-4 mx-4 mt-2">{data?.retorno[pos]["enun"]}</h1>
             
             <div className="flex flex-col gap-2 items-center justify-center p-2 w-full text-sm">

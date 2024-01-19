@@ -25,11 +25,12 @@ export interface InputSelectProps extends InputHTMLAttributes<HTMLInputElement> 
   value: string
 }
 
-export const optionsNivel = ["Médio", "Superior"]
+export const optionsNivel = ["Nível Médio", "Nível Superior"]
 export const optionsMateria = ["Língua Portuguesa", "Matemática"]
 export const optionsArea = ["Tecnologia da Informação"]
 export const limitYear = 2005
 export const optionsAno: string[] = []
+export const optionsQuestionsV2 = ["1", "2", "3", "4", "5"]
 
 export const getAnos = () => {
   let year = new Date().getFullYear()
@@ -60,7 +61,7 @@ export const InputSelect = ({title, value, setValue, arrValues}: InputSelectProp
     <div className="p-2 space-y-2  rounded-md m-2">
       <main className="font-bold">{title}</main>
       <select className="w-full p-2 rounded-md shadow-black shadow-sm" onChange={(e) => setValue(e.target.value)} value={value}>
-        <option value="">Selecione uma opção...</option>  
+        <option value="">Selecione...</option>  
         {
           arrValues.map((val, key) => 
             <option key={key} value={val}>{val}</option>  
@@ -86,13 +87,14 @@ export default function Cadastro () {
   const [cargo, setCargo] = React.useState('')
   const [nomeprova, setNomeProva] = React.useState('')
   const optionsQuestions = [a1, a2, a3, a4, a5]
+  const [questions, setQuestions] = React.useState('')
+  const [message, setMessage] = React.useState(false)
  
 
-  const addQuestions = async (e: any) => {
+ {/*  const addQuestions = async (e: any) => {
     e.preventDefault()
 
     let isEmpty = [enun, a1, a2, a3, a4, a5, resp, area, materia, ano, nivel, cargo, nomeprova].includes('')
-    alert(isEmpty)
     const data = {
       enun,
       a1, a2, a3, a4, a5,
@@ -140,9 +142,82 @@ export default function Cadastro () {
  
   } 
 
+  */}
+
+  const addQuestionsV2 = async (e: any) => {
+    e.preventDefault()
+
+    const data = {
+      enun,
+      a1,
+      a2,
+      a3,
+      a4,
+      a5,
+      resp,
+      area,
+      materia,
+      ano,
+      nivel,
+      cargo,
+      nomeprova
+    }
+
+    let isEmpty = [enun, a1, a2, a3, a4, a5, resp, area, materia, ano, nivel, cargo, nomeprova].includes('')
+
+    // isEmpty = true => Contem campos vazios
+    // isEmpty = false => Tudo certo, NAO Contem campos vazios
+    !isEmpty ? 
+      await axios.post(`http://${ipServer}:3333/questionsV2`, data)
+        .then((response) => {
+          let data: RespProps = response.data
+          if (data.status === 0) {
+            setEnun('')
+            setQuestions('')
+            setResp('')
+            setArea('')
+            setMateria('')
+            setAno('')
+            setNivel('')
+            setCargo('')
+            setNomeProva('')
+            setMessage(false)
+            alert("Questão cadastrada com sucesso!")
+          }
+          
+          else {
+            alert(data.erro)
+          }
+        })
+        .catch(() => 
+          alert('Não foi possível concluir a operação, tente novamente')
+        )
+
+    : alert('Preencha os campos vazios') 
+ 
+  } 
+
   React.useEffect(() => {
     getAnos()
   }, [])
+
+  React.useEffect(() => {
+    if (questions.trim().length > 0) {
+      const separated = questions.split('\n')
+
+      if (separated.length === 5) {
+        setMessage(true)
+        setA1(separated[0])
+        setA2(separated[1])
+        setA3(separated[2])
+        setA4(separated[3])
+        setA5(separated[4])
+      } else {
+        setMessage(false)
+      }
+      
+    }
+  }, [questions])
 
   return (
 
@@ -162,9 +237,25 @@ export default function Cadastro () {
             className="w-full p-2 rounded-md  shadow-black shadow-sm"
           />
         </div>
+        <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
+          <main className="font-bold">Insira as 5 alternativas</main>
+          <textarea 
+            placeholder="Insira as 5 alternativas"
+            onChange={(e) => setQuestions(e.target.value)}
+            value={questions}
+            title="Questões"
+            className="w-full pt-2 px-2 rounded-md  shadow-black shadow-sm"
+          />
+          { 
+            !message 
+            ? <p className="pl-2 text-sm text-red-500 -pt-10">Favor, inserir as alternativas em sequencia, uma abaixo da outra</p>
+            : <p className="pl-2 text-sm text-green-600 -pt-10">Alternativas OK. Estão prontas para serem registradas. </p> 
+          }
+        </div>
        
       <div className="xl:md:grid xl:grid-cols-2">
 
+      {/* 
         <Inputs 
           title="Alternativa A" place="Insira a alternativa A"
           value={a1} setValue={setA1}
@@ -189,6 +280,9 @@ export default function Cadastro () {
           title="Alternativa E" place="Insira a alternativa E"
           value={a5} setValue={setA5}
         />
+      */}
+
+
 
         <InputSelect title="Selecione a alternativa correta" value={resp} setValue={setResp} arrValues={optionsQuestions}/>
 
@@ -201,7 +295,7 @@ export default function Cadastro () {
         <InputSelect title="Nivel" value={nivel} setValue={setNivel} arrValues={optionsNivel}/>
 
         <Inputs 
-          title="Cargo" place="Ex: Analista Judiciario"
+          title="Nome cargo prova" place="Ex: Analista Judiciario - Especializado"
           value={cargo} setValue={setCargo}
         />
 
@@ -216,7 +310,7 @@ export default function Cadastro () {
       </form>
       <button 
         type="submit"
-        onClick={addQuestions}
+        onClick={addQuestionsV2}
         className="h-12 w-[350px] bg-green-800 rounded-lg m-8 md:w-[768px] xl:w-[1200px] shadow-md shadow-black"
       >
         <p className="font-bold text-white ">Postar</p>
