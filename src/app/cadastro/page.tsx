@@ -87,8 +87,11 @@ export default function Cadastro () {
   const [cargo, setCargo] = React.useState('')
   const [nomeprova, setNomeProva] = React.useState('')
   const optionsQuestions = [a1, a2, a3, a4, a5]
+
+  const [head, setHead] = React.useState('')
   const [questions, setQuestions] = React.useState('')
   const [message, setMessage] = React.useState(false)
+  const [message2, setMessage2] = React.useState(false)
  
 
  {/*  const addQuestions = async (e: any) => {
@@ -219,6 +222,23 @@ export default function Cadastro () {
     }
   }, [questions])
 
+  React.useEffect(() => {
+    if (head.trim().length > 0) {
+      const separated = head.split('\n')
+
+      if (separated.length === 4) {
+        setMessage2(true)
+        setNomeProva(separated[0])
+        setCargo(separated[1])
+        setNivel(separated[2])
+        setAno(separated[3])
+      } else {
+        setMessage2(false)
+      }
+      
+    }
+  }, [head])
+
   return (
 
     <div className="flex flex-col items-center justify-center m-4 ">
@@ -227,6 +247,26 @@ export default function Cadastro () {
     
       <form className=" h-full w-[350px] md:w-[768px] xl:w-[1200px] xl:m-8  bg-zinc-300 rounded-lg my-4 shadow-md shadow-black">
 
+      <div className="xl:md:grid xl:grid-cols-2">
+        <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
+          <main className="font-bold">Insira o cabecalho</main>
+          <textarea 
+            placeholder="Insira o cabecalho\
+            Insira o cabecalho"
+            onChange={(e) => setHead(e.target.value)}
+            value={head}
+            title="Cabecalho"
+            className="w-full pt-2 px-2 rounded-md h-36 shadow-black shadow-sm"
+          />
+          { 
+            !message2 
+            ? <p className="pl-2 text-sm text-red-500 -pt-10">Favor, inserir o cabecalho em sequencia, um abaixo da outra</p>
+            : <p className="pl-2 text-sm text-green-600 -pt-10">Alternativas OK. Cabecalho pronto. </p> 
+          }
+        </div>
+    </div>
+
+        
         <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
           <main className="font-bold">Enunciado da questão</main>
           <textarea 
@@ -234,7 +274,7 @@ export default function Cadastro () {
             onChange={(e) => setEnun(e.target.value)}
             value={enun}
             title="Enunciado"
-            className="w-full p-2 rounded-md  shadow-black shadow-sm"
+            className="w-full p-2 rounded-md h-24 shadow-black shadow-sm"
           />
         </div>
         <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
@@ -244,7 +284,7 @@ export default function Cadastro () {
             onChange={(e) => setQuestions(e.target.value)}
             value={questions}
             title="Questões"
-            className="w-full pt-2 px-2 rounded-md  shadow-black shadow-sm"
+            className="w-full pt-2 px-2 rounded-md h-36 shadow-black shadow-sm"
           />
           { 
             !message 
@@ -284,25 +324,12 @@ export default function Cadastro () {
 
 
 
-        <InputSelect title="Selecione a alternativa correta" value={resp} setValue={setResp} arrValues={optionsQuestions}/>
-
         <InputSelect title="Área" value={area} setValue={setArea} arrValues={optionsArea}/>
 
         <InputSelect title="Matéria" value={materia} setValue={setMateria} arrValues={optionsMateria}/>
 
-        <InputSelect title="Ano" value={ano} setValue={setAno} arrValues={optionsAno}/>
+        <InputSelect title="Alternativa correta" value={resp} setValue={setResp} arrValues={optionsQuestions}/>
 
-        <InputSelect title="Nivel" value={nivel} setValue={setNivel} arrValues={optionsNivel}/>
-
-        <Inputs 
-          title="Nome cargo prova" place="Ex: Analista Judiciario - Especializado"
-          value={cargo} setValue={setCargo}
-        />
-
-        <Inputs 
-          title="Nome prova" place="Ex: TRIBUNAL REGIONAL DO TRABALHO 13ª REGIÃO"
-          value={nomeprova} setValue={setNomeProva}
-        />
 
       </div>
 
