@@ -1,8 +1,10 @@
 'use client';
 
-import React, { InputHTMLAttributes } from "react";
+import React from "react";
 import axios from 'axios'
 import { ipServer } from "@/config/server";
+import { Components } from "@/components";
+import { Options } from "@/utils/options";
 
 
 type RespProps = {
@@ -11,66 +13,17 @@ type RespProps = {
   erro: string
 }
 
-export interface InputsProps extends InputHTMLAttributes<HTMLInputElement> {
-  title: string
-  place: string
-  setValue: React.Dispatch<React.SetStateAction<string>>
-  value: string
-}
-
-export interface InputSelectProps extends InputHTMLAttributes<HTMLInputElement> {
-  title: string
-  setValue: React.Dispatch<React.SetStateAction<string>>
-  arrValues: string[]
-  value: string
-}
-
-export const optionsNivel = ["Nível Médio", "Nível Superior"]
-export const optionsMateria = ["Língua Portuguesa", "Matemática"]
-export const optionsArea = ["Tecnologia da Informação"]
-export const limitYear = 2005
-export const optionsAno: string[] = []
-export const optionsQuestionsV2 = ["1", "2", "3", "4", "5"]
+export const limitYear: number = 2005
 
 export const getAnos = () => {
   let year = new Date().getFullYear()
-  if (optionsAno.length < 1) {
+  if (Options.ano.length < 1) {
     for (let i=year; i>=limitYear; i--) {
-      optionsAno.push(i.toString())
+      Options.ano.push(i.toString())
     }
   }
 }
 
-export const Inputs = ({title, place, setValue, value}: InputsProps) => {
-  return (
-    <div className="p-2 space-y-2  rounded-md m-2 ">
-      <main className="font-bold">{title}</main>
-      <input 
-        type="text"
-        placeholder={place}
-        onChange={(e) => setValue(e.target.value)}
-        value={value}
-        className="w-full p-2 rounded-md  shadow-black shadow-sm"
-      />
-    </div>
-  )
-}
-
-export const InputSelect = ({title, value, setValue, arrValues}: InputSelectProps) => {
-  return (
-    <div className="p-2 space-y-2  rounded-md m-2">
-      <main className="font-bold">{title}</main>
-      <select className="w-full p-2 rounded-md shadow-black shadow-sm" onChange={(e) => setValue(e.target.value)} value={value}>
-        <option value="">Selecione...</option>  
-        {
-          arrValues.map((val, key) => 
-            <option key={key} value={val}>{val}</option>  
-          )
-        }
-      </select>
-    </div>
-  )
-}
 
 export default function Cadastro () {
   const [enun, setEnun] = React.useState('')
@@ -86,6 +39,8 @@ export default function Cadastro () {
   const [nivel, setNivel] = React.useState('')
   const [cargo, setCargo] = React.useState('')
   const [nomeprova, setNomeProva] = React.useState('')
+
+  const [banca, setBanca] = React.useState('')
   const optionsQuestions = [a1, a2, a3, a4, a5]
 
   const [head, setHead] = React.useState('')
@@ -163,10 +118,11 @@ export default function Cadastro () {
       ano,
       nivel,
       cargo,
-      nomeprova
+      nomeprova,
+      banca
     }
 
-    let isEmpty = [enun, a1, a2, a3, a4, a5, resp, area, materia, ano, nivel, cargo, nomeprova].includes('')
+    let isEmpty = [enun, a1, a2, a3, a4, a5, resp, area, materia, ano, nivel, cargo, nomeprova, banca].includes('')
 
     // isEmpty = true => Contem campos vazios
     // isEmpty = false => Tudo certo, NAO Contem campos vazios
@@ -178,12 +134,12 @@ export default function Cadastro () {
             setEnun('')
             setQuestions('')
             setResp('')
-            setArea('')
-            setMateria('')
-            setAno('')
-            setNivel('')
-            setCargo('')
-            setNomeProva('')
+            //setArea('')
+            //setMateria('')
+            //setAno('')
+            //setNivel('')
+            //setCargo('')
+            //setNomeProva('')
             setMessage(false)
             alert("Questão cadastrada com sucesso!")
           }
@@ -192,13 +148,13 @@ export default function Cadastro () {
             alert(data.erro)
           }
         })
-        .catch(() => 
-          alert('Não foi possível concluir a operação, tente novamente')
+        .catch((e: any) => 
+          alert(JSON.stringify(e))
         )
 
     : alert('Preencha os campos vazios') 
  
-  } 
+  }
 
   React.useEffect(() => {
     getAnos()
@@ -247,16 +203,16 @@ export default function Cadastro () {
     
       <form className=" h-full w-[350px] md:w-[768px] xl:w-[1200px] xl:m-8  bg-zinc-300 rounded-lg my-4 shadow-md shadow-black">
 
-      <div className="xl:md:grid xl:grid-cols-2">
+      
         <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
           <main className="font-bold">Insira o cabecalho</main>
           <textarea 
-            placeholder="Insira o cabecalho\
-            Insira o cabecalho"
+            placeholder={`TRIBUNAL DE JUSTIÇA DO ESTADO DE MATO GROSSO DO SUL \nANALISTA JUDICIÁRIO - ÁREA FIM \nNível Médio \n2022`}
             onChange={(e) => setHead(e.target.value)}
             value={head}
             title="Cabecalho"
-            className="w-full pt-2 px-2 rounded-md h-36 shadow-black shadow-sm"
+            className="w-full pt-2 px-2 rounded-md h-28 shadow-black shadow-sm"
+            
           />
           { 
             !message2 
@@ -264,9 +220,7 @@ export default function Cadastro () {
             : <p className="pl-2 text-sm text-green-600 -pt-10">Alternativas OK. Cabecalho pronto. </p> 
           }
         </div>
-    </div>
-
-        
+   
         <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
           <main className="font-bold">Enunciado da questão</main>
           <textarea 
@@ -277,14 +231,15 @@ export default function Cadastro () {
             className="w-full p-2 rounded-md h-24 shadow-black shadow-sm"
           />
         </div>
+
         <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
-          <main className="font-bold">Insira as 5 alternativas</main>
+          <main className="font-bold">Insira as alternativas</main>
           <textarea 
-            placeholder="Insira as 5 alternativas"
+            placeholder={`(A) ...\n(B) ...\n(C) ...\n(D) ...\n(E) ...`}
             onChange={(e) => setQuestions(e.target.value)}
             value={questions}
             title="Questões"
-            className="w-full pt-2 px-2 rounded-md h-36 shadow-black shadow-sm"
+            className="w-full pt-2 px-2 rounded-md h-32 shadow-black shadow-sm"
           />
           { 
             !message 
@@ -324,12 +279,13 @@ export default function Cadastro () {
 
 
 
-        <InputSelect title="Área" value={area} setValue={setArea} arrValues={optionsArea}/>
+        <Components.InputSelect title="Área" value={area} setValue={setArea} arrValues={Options.area}/>
 
-        <InputSelect title="Matéria" value={materia} setValue={setMateria} arrValues={optionsMateria}/>
+        <Components.InputSelect title="Matéria" value={materia} setValue={setMateria} arrValues={Options.materia}/>
 
-        <InputSelect title="Alternativa correta" value={resp} setValue={setResp} arrValues={optionsQuestions}/>
+        <Components.InputSelect title="Alternativa correta" value={resp} setValue={setResp} arrValues={optionsQuestions}/>
 
+        <Components.InputSelect title="Banca" value={banca} setValue={setBanca} arrValues={Options.banca}/>
 
       </div>
 
