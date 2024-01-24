@@ -46,8 +46,7 @@ export default function Cadastro () {
   const [head, setHead] = React.useState('')
   const [questions, setQuestions] = React.useState('')
   const [message, setMessage] = React.useState(false)
-  const [message2, setMessage2] = React.useState(false)
- 
+
 
  {/*  const addQuestions = async (e: any) => {
     e.preventDefault()
@@ -178,22 +177,6 @@ export default function Cadastro () {
     }
   }, [questions])
 
-  React.useEffect(() => {
-    if (head.trim().length > 0) {
-      const separated = head.split('\n')
-
-      if (separated.length === 4) {
-        setMessage2(true)
-        setNomeProva(separated[0])
-        setCargo(separated[1])
-        setNivel(separated[2])
-        setAno(separated[3])
-      } else {
-        setMessage2(false)
-      }
-      
-    }
-  }, [head])
 
   return (
 
@@ -203,49 +186,48 @@ export default function Cadastro () {
     
       <form className=" h-full w-[350px] md:w-[768px] xl:w-[1200px] xl:m-8  bg-zinc-300 rounded-lg my-4 shadow-md shadow-black">
 
-      
+
+
         <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
-          <main className="font-bold">Insira o cabecalho</main>
+          <h2 className="font-bold">Título da Prova</h2>
           <textarea 
-            placeholder={`TRIBUNAL DE JUSTIÇA DO ESTADO DE MATO GROSSO DO SUL \nANALISTA JUDICIÁRIO - ÁREA FIM \nNível Médio \n2022`}
-            onChange={(e) => setHead(e.target.value)}
-            value={head}
+            placeholder={`TRIBUNAL DE JUSTIÇA DO ESTADO DE MATO GROSSO DO SUL`}
+            onChange={(e) => setNomeProva(e.target.value)}
+            value={nomeprova}
             title="Cabecalho"
-            className="w-full pt-2 px-2 rounded-md h-28 shadow-black shadow-sm"
-            
+            className="w-full pt-2 px-2 rounded-md h-10 shadow-black shadow-sm "
           />
-          { 
-            !message2 
-            ? <p className="pl-2 text-sm text-red-500 -pt-10">Favor, inserir o cabecalho em sequencia, um abaixo da outra</p>
-            : <p className="pl-2 text-sm text-green-600 -pt-10">Alternativas OK. Cabecalho pronto. </p> 
-          }
         </div>
+
+        <div className="xl:md:grid xl:grid-cols-2">
+          <Components.InputSelect title="Banca" value={banca} setValue={setBanca} arrValues={Options.banca}/>
+          <Components.Inputs title="Cargo" place="Ex: ANALISTA JUDICIÁRIO"value={cargo} setValue={setCargo} />
+          <Components.InputSelect title="Ano" value={ano} setValue={setAno} arrValues={Options.ano}/>
+          <Components.InputSelect title="Escolaridade" value={nivel} setValue={setNivel} arrValues={Options.nivel}/>
+        </div>
+      
+
    
         <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
-          <main className="font-bold">Enunciado da questão</main>
+          <h2 className="font-bold">Enunciado da questão</h2>
           <textarea 
             placeholder="Insira o enunciado da questão"
             onChange={(e) => setEnun(e.target.value)}
             value={enun}
             title="Enunciado"
-            className="w-full p-2 rounded-md h-24 shadow-black shadow-sm"
+            className="w-full pt-2 px-2 rounded-md h-10 shadow-black shadow-sm focus:h-32 duration-300 focus:border-blue-500"
           />
         </div>
 
         <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
-          <main className="font-bold">Insira as alternativas</main>
+          <main className="font-bold">Alternativas</main>
           <textarea 
             placeholder={`(A) ...\n(B) ...\n(C) ...\n(D) ...\n(E) ...`}
             onChange={(e) => setQuestions(e.target.value)}
             value={questions}
             title="Questões"
-            className="w-full pt-2 px-2 rounded-md h-32 shadow-black shadow-sm"
+            className="w-full pt-2 px-2 rounded-md h-10 shadow-black shadow-sm focus:h-32 duration-300 focus:border-blue-500"
           />
-          { 
-            !message 
-            ? <p className="pl-2 text-sm text-red-500 -pt-10">Favor, inserir as alternativas em sequencia, uma abaixo da outra</p>
-            : <p className="pl-2 text-sm text-green-600 -pt-10">Alternativas OK. Estão prontas para serem registradas. </p> 
-          }
         </div>
        
       <div className="xl:md:grid xl:grid-cols-2">
@@ -285,7 +267,6 @@ export default function Cadastro () {
 
         <Components.InputSelect title="Alternativa correta" value={resp} setValue={setResp} arrValues={optionsQuestions}/>
 
-        <Components.InputSelect title="Banca" value={banca} setValue={setBanca} arrValues={Options.banca}/>
 
       </div>
 
