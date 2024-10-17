@@ -5,6 +5,7 @@ import axios from 'axios'
 import { ipServer } from "@/config/server";
 import { Components } from "@/components";
 import { Options } from "@/utils/options";
+import { layoutNames } from "@/utils/options";
 
 
 type RespProps = {
@@ -123,6 +124,7 @@ export default function Cadastro () {
 
     let isEmpty = [enun, a1, a2, a3, a4, a5, resp, area, materia, ano, nivel, cargo, nomeprova, banca].includes('')
 
+    //alert(JSON.stringify(data))
     // isEmpty = true => Contem campos vazios
     // isEmpty = false => Tudo certo, NAO Contem campos vazios
     !isEmpty ? 
@@ -182,7 +184,9 @@ export default function Cadastro () {
 
     <div className="flex flex-col items-center justify-center m-4 ">
       
-      <h1 className="font-bold text-2xl my-4">Cadastrar uma nova questão</h1>
+      <h1 className="font-bold text-2xl my-4">
+        {layoutNames.pages.cadastro.title}
+      </h1>
     
       <form className=" h-full w-[350px] md:w-[768px] xl:w-[1200px] xl:m-8  bg-zinc-300 rounded-lg my-4 shadow-md shadow-black">
 
@@ -191,7 +195,7 @@ export default function Cadastro () {
         <div className="p-2 space-y-2 rounded-md mt-4 m-2" >
           <h2 className="font-bold">Título da Prova</h2>
           <textarea 
-            placeholder={`TRIBUNAL DE JUSTIÇA DO ESTADO DE MATO GROSSO DO SUL`}
+            placeholder={`Ex: TRIBUNAL DE JUSTIÇA DO ESTADO DE MATO GROSSO DO SUL`}
             onChange={(e) => setNomeProva(e.target.value)}
             value={nomeprova}
             title="Cabecalho"
@@ -200,10 +204,10 @@ export default function Cadastro () {
         </div>
 
         <div className="xl:md:grid xl:grid-cols-2">
-          <Components.InputSelect title="Banca" value={banca} setValue={setBanca} arrValues={Options.banca}/>
-          <Components.Inputs title="Cargo" place="Ex: ANALISTA JUDICIÁRIO"value={cargo} setValue={setCargo} />
-          <Components.InputSelect title="Ano" value={ano} setValue={setAno} arrValues={Options.ano}/>
-          <Components.InputSelect title="Escolaridade" value={nivel} setValue={setNivel} arrValues={Options.nivel}/>
+          <Components.InputSelect title={layoutNames.pages.cadastro.form.banca} value={banca} setValue={setBanca} arrValues={Options.banca}/>
+          <Components.Inputs title={layoutNames.pages.cadastro.form.cargo} place="Ex: ANALISTA JUDICIÁRIO"value={cargo} setValue={setCargo} />
+          <Components.InputSelect title={layoutNames.pages.cadastro.form.ano} value={ano} setValue={setAno} arrValues={Options.ano}/>
+          <Components.InputSelect title={layoutNames.pages.cadastro.form.escolaridade} value={nivel} setValue={setNivel} arrValues={Options.nivel}/>
         </div>
       
 
@@ -261,11 +265,11 @@ export default function Cadastro () {
 
 
 
-        <Components.InputSelect title="Área" value={area} setValue={setArea} arrValues={Options.area}/>
+        <Components.InputSelect title={layoutNames.pages.cadastro.form.area}  value={area} setValue={setArea} arrValues={Options.area}/>
 
-        <Components.InputSelect title="Matéria" value={materia} setValue={setMateria} arrValues={Options.materia}/>
+        <Components.InputSelect title={layoutNames.pages.cadastro.form.materia}  value={materia} setValue={setMateria} arrValues={Options.materia}/>
 
-        <Components.InputSelect title="Alternativa correta" value={resp} setValue={setResp} arrValues={optionsQuestions}/>
+        <Components.InputSelect title={layoutNames.pages.cadastro.form.alternativacorreta} value={resp} setValue={setResp} arrValues={optionsQuestions}/>
 
 
       </div>
@@ -277,7 +281,7 @@ export default function Cadastro () {
         onClick={addQuestionsV2}
         className="h-12 w-[350px] bg-green-800 rounded-lg m-8 md:w-[768px] xl:w-[1200px] shadow-md shadow-black"
       >
-        <p className="font-bold text-white ">Postar</p>
+        <p className="font-bold text-white ">{layoutNames.pages.cadastro.button}</p>
       </button>
 
       <div>
