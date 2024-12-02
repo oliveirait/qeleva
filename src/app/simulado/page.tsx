@@ -41,7 +41,7 @@ export default function Simulado () {
   return (
 
     
-    <div className="flex flex-col items-center justify-center bg-zinc-100">
+    <div className=" flex flex-col items-center justify-center ">
       <div className=" w-[350px] md:h-[500px] md:w-[768px] xl:w-[1000px] rounded-xl ">
       
           { data.retorno?.length > 0 ?

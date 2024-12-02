@@ -35,12 +35,10 @@ export default function Questoes () {
   const [nivel, setNivel] = React.useState('')
   const [banca, setBanca] = React.useState('')
   
-
+  const emptyInData = [quantidade, area, materia, ano, nivel, banca].includes('')
 
   const questionQuery = async (e: any) => {
     e.preventDefault()
-
-    const emptyInData = [quantidade, area, materia, ano, nivel].includes('')
 
     if (emptyInData) {
       return alert('Preencha todos os campos!')
@@ -50,7 +48,7 @@ export default function Questoes () {
       quantidade, area, materia, ano, nivel, banca
     }
 
-    await axios.post(`http://${ipServer}:3333/randomSimulator`, dados)
+    await axios.post(`http://localhost:3333/randomSimulator`, dados)
       .then((response) => {
         if (response.data.retorno?.length > 0) {
           setData(response.data)
@@ -71,11 +69,11 @@ export default function Questoes () {
 
 
   return(
-    <div className="items-center justify-center flex flex-col gap-4">
-      <h1 className="p-8 font-bold text-2xl">Crie seu simulado</h1>
+    <div className="items-center justify-start flex flex-col gap-4 h-screen">
+      <h1 className="text-white p-8 font-bold text-2xl">Crie seu simulado</h1>
 
-      <div className="w-[350px] h-full md:w-[768px] xl:w-[1200px] m-2 grid md:grid-cols-3 bg-zinc-200 self-center rounded-xl p-8">
-        
+      <div className="w-[350px] md:w-[768px] xl:w-[1200px] m-2 grid md:grid-cols-3 bg-gray-200 self-center rounded-xl p-8">
+
         <InputSelect title='Banca' value={banca} setValue={setBanca} arrValues={Options.banca} />
         <InputSelect title="Área" value={area} setValue={setArea} arrValues={Options.area}/>
         <InputSelect title="Matéria" value={materia} setValue={setMateria} arrValues={Options.materia}/>
@@ -84,10 +82,10 @@ export default function Questoes () {
         <InputSelect title='Quantidade de questões' value={quantidade} setValue={setQuantidade} arrValues={optionsQuantidade} />
       </div>
       
-      <div className="w-[350px] md:w-[768px] xl:w-[1200px] self-center">
-        <button 
+      <div className={`w-[350px] md:w-[768px] xl:w-[1200px] self-center`}>
+        <button disabled={emptyInData}
           onClick={questionQuery}
-          className="bg-green-950 rounded-md p-4 hover:bg-green-600 duration-200">
+          className={`rounded-md p-4 duration-200 ${emptyInData ? `bg-gray-700 ` : `bg-green-700 hover:bg-green-500`}  `}>
           <p className="text-white font-bold " >Gerar simulado</p>
         </button>
       </div>

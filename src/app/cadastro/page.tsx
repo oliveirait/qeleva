@@ -182,9 +182,9 @@ export default function Cadastro () {
 
   return (
 
-    <div className="flex flex-col items-center justify-center m-4 ">
+    <div className=" flex flex-col items-center justify-center m-4 ">
       
-      <h1 className="font-bold text-2xl my-4">
+      <h1 className="text-white font-bold text-2xl my-4">
         {layoutNames.pages.cadastro.title}
       </h1>
     
@@ -276,10 +276,11 @@ export default function Cadastro () {
 
 
       </form>
+
       <button 
         type="submit"
         onClick={addQuestionsV2}
-        className="h-12 w-[350px] bg-green-800 rounded-lg m-8 md:w-[768px] xl:w-[1200px] shadow-md shadow-black"
+        className="h-16 w-[350px] bg-green-700 hover:bg-green-500 duration-200 rounded-lg  md:w-[768px] xl:w-[1200px] shadow-md shadow-black rounded-md p-4"
       >
         <p className="font-bold text-white ">{layoutNames.pages.cadastro.button}</p>
       </button>
